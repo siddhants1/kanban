@@ -43,8 +43,11 @@ const isPasswordValid = async (password, hashedPassword) => {
     }
 }
 
+const errorFunction = (errorBit, msg, data = {}) => (errorBit ? { message: msg } : { message: msg, data: data });
+
 module.exports = {
     generateJwt,
     generatePasswordHash,
     isPasswordValid,
+    errorFunction,
 };

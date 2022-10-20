@@ -1,8 +1,9 @@
-const { healthRouter } = require('../health/health.router');
+const { healthRouter } = require('../components/health/health.router');
+const { userRouter } = require('../components/user/user.router');
 
 const routingMiddleware = (app) => {
     app.use('/health', healthRouter);
-
+    app.use('/user', userRouter);
 
     // 404 handler
     app.use((req, res, next) => {

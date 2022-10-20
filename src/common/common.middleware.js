@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express'), swaggerDocument = require('../swagger.json');
+const { findTokenInDB } = require('../components/miscellaneous/miscellaneous.service');
 require('dotenv').config();
 
 const commonMiddlewares = (app) => {
@@ -21,6 +22,12 @@ const authenticationMiddleware = async (req, res, next) => {
     if(token === null || token === undefined) {
         return res.status(401).json({ message: 'Unauthorized access: Token is required' });
     }
+    
+    const invalidCheckResult = await findTokenInDB(token);
+    if (invalidCheckResult.success === false) {
+        return res.status(401).json({ message: 'Invalid Token' });
+    }
+
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if(err) {
             return res.status(403).json({ message: 'Invalid token' });
