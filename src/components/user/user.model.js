@@ -66,6 +66,21 @@ const userModel = (sequelize) => {
                 },
             },
         },
+        isDeleted: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+            // validate: {
+            //     isValid(value) {
+            //         if (typeof value !== 'number') {
+            //             throw new Error('isDeleted must be a number');
+            //         }
+            //         if (value !== 0 || value !== 1) {
+            //             throw new Error('isDeleted cannot be other than 0 or 1');
+            //         }
+            //     }
+            // }
+        },
     });
 
     return User;

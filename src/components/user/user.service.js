@@ -42,7 +42,53 @@ const findUserByEmailService = async (email) => {
     }
 }
 
+const deleteUserService = async (id) => {
+    const txn = await db.sequelize.transaction();
+    try {
+        const result = await db.User.update(
+            { isDeleted: 1 },
+            { where: { id: id } },
+            { transaction: txn }
+        );
+        await txn.commit();
+        return {
+            success: true,
+        };
+    }
+    catch(err) {
+        await txn.rollback();
+        return {
+            success: false,
+            error: err?.errors?.[0]?.message,
+        };
+    }
+}
+
+const updateUserService = async (data, id) => {
+    const txn = await db.sequelize.transaction();
+    try {
+        const result = await db.User.update(
+            data,
+            { where: { id: id } },
+            { transaction: txn }
+        );
+        await txn.commit();
+        return {
+            success: true,
+        };
+    }
+    catch(err) {
+        await txn.rollback();
+        return {
+            success: false,
+            error: err?.errors?.[0]?.message,
+        };
+    }
+}
+
 module.exports = {
     createUserService,
-    findUserByEmailService
+    findUserByEmailService,
+    deleteUserService,
+    updateUserService,
 };

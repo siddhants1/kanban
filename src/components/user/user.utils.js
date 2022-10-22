@@ -14,6 +14,13 @@ const userLoginValidation = joi.object({
     password: joi.string().min(8).max(30).required(),
 });
 
+const userUpdateValidation = joi.object({
+    firstName: joi.string().min(1),
+    lastName: joi.string(),
+    email: joi.string().pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/),
+    password: joi.string().min(8).max(30),
+});
+
 const loginUtils = async (body) => {
     const result = await findUserByEmailService(body?.email);
     if (result.success === false) {
@@ -50,4 +57,5 @@ module.exports = {
     userValidation,
     userLoginValidation,
     loginUtils,
+    userUpdateValidation,
 };

@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Node JS Express powered API for Kanban",
+        "description": "Node JS based Express powered API for Kanban",
         "version": "1.0.0",
         "title": "Kanban"
     },
@@ -121,6 +121,80 @@
                     }
                 ]
             }
+        },
+        "/user/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Endpoint to delete a user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token in form of: Bearer Token",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID of user to be deleted",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/user/update/{id}": {
+            "patch": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Endpoint to Update a user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token in form of: Bearer Token",
+                        "required": true
+                    },
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID of user to be deleted",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Request Object",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ]
+            }
         }
     },
     "definitions": {
@@ -146,13 +220,6 @@
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "Header": {
-            "properties": {
-                "authorization": {
                     "type": "string"
                 }
             }

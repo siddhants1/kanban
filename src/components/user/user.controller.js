@@ -1,7 +1,7 @@
 const { generatePasswordHash, errorFunction, generateJwt } = require("../../common/common.utils");
 const { addInvalidTokenService } = require("../miscellaneous/miscellaneous.service");
-const { createUserService } = require("./user.service");
-const { userValidation, userLoginValidation, loginUtils } = require("./user.utils");
+const { createUserService, deleteUserService, updateUserService } = require("./user.service");
+const { userValidation, userLoginValidation, loginUtils, userUpdateValidation } = require("./user.utils");
 
 const userSignUpController = async (req, res) => {
     const body = {
@@ -66,8 +66,55 @@ const userLogoutController = async (req, res) => {
     return res.status(200).json(errorFunction(false, 'Logged out successfully', {}));
 }
 
+const deleteUserController = async (req, res) => {
+    const id = req?.params?.id;
+    if (!id) {
+        return res.status(400).json(errorFunction(true, 'id is required'));
+    }
+
+    if (Number(id) !== req?.user?.id) {
+        return res.status(400).json(errorFunction(true, 'Not authorized to delete the user'));
+    }
+
+    const deletionResult = await deleteUserService(id);
+    if (deletionResult.success === false) {
+        return res.status(400).json(errorFunction(true, deletionResult?.error));
+    }
+    return res.status(200).json(errorFunction(false, 'Deleted Successfully', {}));
+}
+
+const updateUserController = async (req, res) => {
+    const id = req?.params?.id;
+    if (!id) {
+        return res.status(400).json(errorFunction(true, 'id is required'));
+    }
+
+    if (Number(id) !== req?.user?.id) {
+        return res.status(400).json(errorFunction(true, 'Not authorized to update the user'));
+    }
+
+    const body = req?.body;
+
+    if (req?.body?.password) {
+        body.password = await generatePasswordHash(req?.body?.password);
+    }
+
+    const { error } = userUpdateValidation.validate(body);
+    if (error) {
+        return res.status(400).json(errorFunction(true, error?.message));   
+    }
+
+    const updateResult = await updateUserService(body, id);
+    if (updateResult.success === false) {
+        return res.status(400).json(errorFunction(true, updateResult?.error));
+    }
+    return res.status(200).json(errorFunction(false, 'Updated Successfully', {}));
+}
+
 module.exports = {
     userSignUpController,
     userLoginController,
     userLogoutController,
+    deleteUserController,
+    updateUserController,
 };
