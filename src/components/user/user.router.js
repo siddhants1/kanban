@@ -5,9 +5,9 @@ const userRouter = require('express').Router();
 
 userRouter.post('/sign-up', userSignUpController);
 
-userRouter.post('/login', userLoginController);
+userRouter.post('/sign-in', userLoginController);
 
-userRouter.post('/logout', authenticationMiddleware, userLogoutController);
+userRouter.post('/sign-out', authenticationMiddleware, userLogoutController);
 
 module.exports = {
     userRouter,

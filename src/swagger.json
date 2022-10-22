@@ -5,12 +5,17 @@
         "version": "1.0.0",
         "title": "Kanban"
     },
-    "schemes": ["http"],
+    "schemes": [
+        "http"
+    ],
     "host": "localhost:3001",
     "basePath": "/",
     "tags": [
         {
             "name": "health"
+        },
+        {
+            "name": "user"
         }
     ],
     "paths": {
@@ -27,6 +32,128 @@
                     "200": {
                         "description": "ok"
                     }
+                }
+            }
+        },
+        "/user/sign-up": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Endpoint to regiser a user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Request Object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/sign-in": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Endpoint to sign-in a user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Request Object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserValidation"
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/sign-out": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Endpoint to sign-out a user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Request Object",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserValidation": {
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Header": {
+            "properties": {
+                "authorization": {
+                    "type": "string"
                 }
             }
         }
