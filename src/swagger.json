@@ -16,6 +16,9 @@
         },
         {
             "name": "user"
+        },
+        {
+            "name": "room"
         }
     ],
     "paths": {
@@ -195,6 +198,42 @@
                     }
                 ]
             }
+        },
+        "/room/create": {
+            "post": {
+                "tags": [
+                    "room"
+                ],
+                "summary": "Endpoint to create a room",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok"
+                    },
+                    "400": {
+                        "description": "Error message"
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token in form of: Bearer Token",
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Request Object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Room"
+                        }
+                    }
+                ]
+            }
         }
     },
     "definitions": {
@@ -210,6 +249,13 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Room": {
+            "properties": {
+                "roomName": {
                     "type": "string"
                 }
             }

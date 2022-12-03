@@ -5,9 +5,9 @@ const createUserService = async (data) => {
     try {
         const user = await db.User.create(data, { transaction: txn });
         await txn.commit();
-
         return {
             success: true,
+            originalUser: user,
             user: user?.dataValues,
         };
     }

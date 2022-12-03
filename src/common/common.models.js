@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const { invalidTokensModel } = require('../components/miscellaneous/miscellaneous.model');
+const { roomModel } = require('../components/room/room.model');
 require('dotenv').config();
 
 const { userModel } = require('../components/user/user.model');
@@ -29,9 +30,15 @@ db.sequelize = sequelize;
 
 const User = userModel(sequelize);
 const InvalidToken = invalidTokensModel(sequelize);
+const Room = roomModel(sequelize);
 
 db.User = User;
 db.InvalidToken = InvalidToken;
+db.Room = Room;
+
+// ASSOCIATIONS
+db.User.belongsToMany(db.Room, { through: 'User_Rooms' });
+db.Room.belongsToMany(db.User, { through: 'User_Rooms' });
 
 sequelize.sync();
 

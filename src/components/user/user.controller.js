@@ -1,5 +1,5 @@
 const { generatePasswordHash, errorFunction, generateJwt } = require("../../common/common.utils");
-const { addInvalidTokenService } = require("../miscellaneous/miscellaneous.service");
+const { addInvalidTokenService, userRoomMappingService } = require("../miscellaneous/miscellaneous.service");
 const { createUserService, deleteUserService, updateUserService } = require("./user.service");
 const { userValidation, userLoginValidation, loginUtils, userUpdateValidation } = require("./user.utils");
 
@@ -19,6 +19,7 @@ const userSignUpController = async (req, res) => {
     body.password = await generatePasswordHash(body.password);
     const createResult = await createUserService(body);
     const tokenResult = await generateJwt(createResult?.user);
+    const mappingResult = await userRoomMappingService(createResult?.originalUser);
 
     if (createResult.success === false) {
         return res.status(400).json(errorFunction(true, createResult?.error));
@@ -26,6 +27,10 @@ const userSignUpController = async (req, res) => {
 
     if (tokenResult.success === false) {
         return res.status(400).json(errorFunction(true, 'Internal server error'));
+    }
+
+    if (mappingResult.success === false) {
+        return res.status(400).json(errorFunction(true, mappingResult?.message));
     }
 
     const response = { token: tokenResult?.token, user: createResult?.user };

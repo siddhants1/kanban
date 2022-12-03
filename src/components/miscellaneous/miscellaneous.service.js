@@ -1,4 +1,5 @@
 const { db } = require('../../common/common.models');
+const { findRoomByNameService } = require('../room/room.service');
 
 const addInvalidTokenService = async (token) => {
     const txn = await db.sequelize.transaction();
@@ -39,7 +40,26 @@ const findTokenInDB = async (token) => {
     }
 }
 
+const userRoomMappingService = async (user) => {
+    const room = (await findRoomByNameService('General'))?.room;
+    const txn = await db.sequelize.transaction();
+    try {
+        await user?.addRoom(room?.id);
+        await txn.commit();
+        return {
+            success: true,
+        };
+    } catch(err) {
+        await txn.rollback();
+        return {
+            success: false,
+            message: 'Error'
+        };
+    }
+}
+
 module.exports = {
     findTokenInDB,
     addInvalidTokenService,
+    userRoomMappingService
 };
